@@ -1,14 +1,29 @@
 package com.example.tasks.service.repository
 
+import com.example.tasks.service.HeaderModel
 import com.example.tasks.service.repository.remote.PessoaService
 import com.example.tasks.service.repository.remote.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class PersonRepository {
+class PessoaRepository {
 
-    val remote = RetrofitClient.criarServico(PessoaService::class.java)
+    private val mRemote = RetrofitClient.criarServico(PessoaService::class.java)
 
     fun login(email: String, senha: String) {
-        remote.login(email, senha)
+
+        val call: Call<HeaderModel> = mRemote.login(email, senha)
+        call.enqueue(object : Callback<HeaderModel>{
+            override fun onFailure(call: Call<HeaderModel>, t: Throwable) {
+                val s = ""
+            }
+
+            override fun onResponse(call: Call<HeaderModel>, response: Response<HeaderModel>) {
+                val header = response.body()
+            }
+
+        })
     }
 
 }
