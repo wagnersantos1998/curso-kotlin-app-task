@@ -2,13 +2,21 @@ package com.example.tasks.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.tasks.service.HeaderModel
+import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.repository.PessoaRepository
+import com.example.tasks.service.repository.local.SecurityPreferences
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mPessoaRepository = PessoaRepository()
+    private val mSharedPreference = SecurityPreferences(application)
+
+    private val mLogin = MutableLiveData<Boolean>()
+    var login: LiveData<Boolean> = mLogin
 
     /**
      * Faz login usando API
@@ -17,12 +25,17 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
         mPessoaRepository.login(email, senha, object : APIListener {
 
-            override fun falha(mensagem: String) {
-                val retorno = ""
+            override fun sucesso(model: HeaderModel) {
+
+                mSharedPreference.store(TaskConstants.SHARED.PERSON_KEY, model.personKey)
+                mSharedPreference.store(TaskConstants.SHARED.TOKEN_KEY, model.token)
+                mSharedPreference.store(TaskConstants.SHARED.PERSON_NAME, model.nome)
+
+                mLogin.value = true
             }
 
-            override fun sucesso(model: HeaderModel) {
-                val retorno = ""
+            override fun falha(mensagem: String) {
+                mLogin.value = false
             }
 
         })
