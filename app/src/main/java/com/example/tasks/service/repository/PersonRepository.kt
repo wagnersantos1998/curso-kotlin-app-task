@@ -1,6 +1,7 @@
 package com.example.tasks.service.repository
 
 import com.example.tasks.service.HeaderModel
+import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.repository.remote.PessoaService
 import com.example.tasks.service.repository.remote.RetrofitClient
 import retrofit2.Call
@@ -11,16 +12,16 @@ class PessoaRepository {
 
     private val mRemote = RetrofitClient.criarServico(PessoaService::class.java)
 
-    fun login(email: String, senha: String) {
+    fun login(email: String, senha: String, listener: APIListener) {
 
         val call: Call<HeaderModel> = mRemote.login(email, senha)
         call.enqueue(object : Callback<HeaderModel>{
             override fun onFailure(call: Call<HeaderModel>, t: Throwable) {
-                val s = ""
+                listener.falha(t.message.toString())
             }
 
             override fun onResponse(call: Call<HeaderModel>, response: Response<HeaderModel>) {
-                val header = response.body()
+                response.body()?.let { listener.sucesso(it) }
             }
 
         })

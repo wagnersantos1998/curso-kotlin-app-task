@@ -60,9 +60,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun handleLogin() {
         val email = edit_email.text.toString()
-        val password = edit_password.text.toString()
+        val senha = edit_password.text.toString()
 
-        mViewModel.doLogin(email, password)
+        mViewModel.doLogin(email, senha)
     }
 
 }
