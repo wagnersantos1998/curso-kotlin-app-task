@@ -7,16 +7,17 @@ import androidx.lifecycle.MutableLiveData
 import com.example.tasks.service.HeaderModel
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
+import com.example.tasks.service.listener.ValidacaoListener
 import com.example.tasks.service.repository.PessoaRepository
 import com.example.tasks.service.repository.local.SecurityPreferences
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mPessoaRepository = PessoaRepository()
+    private val mPessoaRepository = PessoaRepository(application)
     private val mSharedPreference = SecurityPreferences(application)
 
-    private val mLogin = MutableLiveData<Boolean>()
-    var login: LiveData<Boolean> = mLogin
+    private val mLogin = MutableLiveData<ValidacaoListener>()
+    var login: LiveData<ValidacaoListener> = mLogin
 
     /**
      * Faz login usando API
@@ -31,11 +32,11 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 mSharedPreference.store(TaskConstants.SHARED.TOKEN_KEY, model.token)
                 mSharedPreference.store(TaskConstants.SHARED.PERSON_NAME, model.nome)
 
-                mLogin.value = true
+                mLogin.value = ValidacaoListener()
             }
 
             override fun falha(mensagem: String) {
-                mLogin.value = false
+                mLogin.value = ValidacaoListener(mensagem)
             }
 
         })
