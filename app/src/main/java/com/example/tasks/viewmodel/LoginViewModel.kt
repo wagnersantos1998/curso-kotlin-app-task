@@ -19,6 +19,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val mLogin = MutableLiveData<ValidacaoListener>()
     var login: LiveData<ValidacaoListener> = mLogin
 
+    private val mLogado = MutableLiveData<Boolean>()
+    var logado: LiveData<Boolean> = mLogado
+
+
     /**
      * Faz login usando API
      */
@@ -46,6 +50,12 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
      * Verifica se usuário está logado
      */
     fun verifyLoggedUser() {
+
+        val token = mSharedPreference.get(TaskConstants.SHARED.TOKEN_KEY)
+        val personKey = mSharedPreference.get(TaskConstants.SHARED.PERSON_KEY)
+
+        mLogado.value = (token != "" && personKey != "")
+
     }
 
 }
