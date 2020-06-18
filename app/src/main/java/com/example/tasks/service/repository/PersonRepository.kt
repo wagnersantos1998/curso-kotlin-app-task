@@ -38,4 +38,26 @@ class PessoaRepository(val context: Context) {
         })
     }
 
+    fun criarUsuario(nome: String, email: String, senha: String, listener: APIListener) {
+
+        val call: Call<HeaderModel> = mRemote.criarUsuario(nome, email, senha, true)
+        call.enqueue(object : Callback<HeaderModel> {
+            override fun onFailure(call: Call<HeaderModel>, t: Throwable) {
+                listener.falha(context.getString(R.string.ERROR_UNEXPECTED))
+            }
+
+            override fun onResponse(call: Call<HeaderModel>, response: Response<HeaderModel>) {
+
+                if (response.code() != TaskConstants.HTTP.SUCCESS) {
+                    val validacao =
+                        Gson().fromJson(response.errorBody()!!.string(), String::class.java)
+                    listener.falha(validacao)
+                } else {
+                    response.body()?.let { listener.sucesso(it) }
+                }
+            }
+
+        })
+    }
+
 }

@@ -10,8 +10,18 @@ interface PessoaService {
 
     @POST("Authentication/Login")
     @FormUrlEncoded
-    fun login(@Field("email") email: String,
-              @Field("password") senha: String
+    fun login(
+        @Field("email") email: String,
+        @Field("password") senha: String
+    ): Call<HeaderModel>
+
+    @POST("Authentication/Create")
+    @FormUrlEncoded
+    fun criarUsuario(
+        @Field("name") nome: String,
+        @Field("email") email: String,
+        @Field("password") senha: String,
+        @Field("receivernews") news: Boolean
     ): Call<HeaderModel>
 
 }
