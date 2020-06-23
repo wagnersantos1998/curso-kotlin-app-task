@@ -1,11 +1,15 @@
 package com.example.tasks.service.repository.local
 
 import android.content.Context
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.tasks.service.model.PrioridadeModel
 
-// @Database(entities = [PriorityModel::class], version = 1)
+@Database(entities = [PrioridadeModel::class], version = 1)
 abstract class TaskDatabase : RoomDatabase() {
+
+    abstract fun DAO(): PrioridadeDAO
 
     companion object {
         private lateinit var INSTANCE: TaskDatabase

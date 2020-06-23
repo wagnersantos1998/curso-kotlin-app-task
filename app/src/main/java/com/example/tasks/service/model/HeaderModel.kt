@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 class HeaderModel {
 
-    @SerializedName("token")
+    @SerializedName("Token")
     var token: String = ""
 
-    @SerializedName("personKey")
+    @SerializedName("PersonKey")
     var personKey: String = ""
 
-    @SerializedName("name")
+    @SerializedName("Name")
     var nome: String = ""
 
 }

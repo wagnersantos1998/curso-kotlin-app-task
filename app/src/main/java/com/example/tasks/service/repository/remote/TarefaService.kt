@@ -1,9 +1,6 @@
 package com.example.tasks.service.repository.remote
 
-import com.example.tasks.service.model.HeaderModel
-import com.example.tasks.service.model.ModeloPrioridade
 import com.example.tasks.service.model.TarefaModel
-import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.*
 

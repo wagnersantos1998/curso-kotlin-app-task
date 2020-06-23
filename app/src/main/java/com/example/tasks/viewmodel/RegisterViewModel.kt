@@ -9,6 +9,7 @@ import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.listener.ValidacaoListener
 import com.example.tasks.service.repository.PessoaRepository
+import com.example.tasks.service.repository.PrioridadeRepository
 import com.example.tasks.service.repository.local.SecurityPreferences
 
 class RegisterViewModel(application: Application) : AndroidViewModel(application) {
