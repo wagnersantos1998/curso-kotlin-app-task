@@ -42,4 +42,8 @@ class PrioridadeRepository(val context: Context) {
         })
     }
 
+    fun buscarPrioridades(): List<PrioridadeModel>{
+        return mPrioridadDatabase.buscarPrioridade()
+    }
+
 }

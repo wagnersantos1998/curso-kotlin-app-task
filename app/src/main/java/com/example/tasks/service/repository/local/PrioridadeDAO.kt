@@ -9,6 +9,9 @@ interface PrioridadeDAO {
     @Insert
     fun salvarLista(lista: List<PrioridadeModel>)
 
+    @Query("SELECT * FROM  prioridade")
+    fun buscarPrioridade(): List<PrioridadeModel>
+
     @Query("DELETE FROM  prioridade")
     fun excluirLista()
 
