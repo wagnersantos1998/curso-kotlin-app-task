@@ -6,23 +6,20 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.example.tasks.R
-import com.example.tasks.viewmodel.RegisterViewModel
+import com.example.tasks.service.model.TarefaModel
 import com.example.tasks.viewmodel.TaskFormViewModel
-import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.activity_register.button_save
 import kotlinx.android.synthetic.main.activity_task_form.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     DatePickerDialog.OnDateSetListener {
 
     private lateinit var mViewModel: TaskFormViewModel
     private val mDataFormatada = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+    val mListaPrioridadeId: MutableList<Int> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +42,21 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         val id = v.id
         if (id == R.id.button_save) {
 
+            eventoSalvar()
 
         } else if (id == R.id.button_date) {
             showDatePicker()
         }
+    }
+
+    private fun eventoSalvar() {
+        val tarefa = TarefaModel().apply {
+            this.descricao = edit_description.text.toString()
+            this.completo = check_complete.isChecked
+            this.dataVencimento = button_date.text.toString()
+            this.prioridadeId = mListaPrioridadeId[spinner_priority.selectedItemPosition]
+        }
+        mViewModel.salvarTarefas(tarefa)
     }
 
     private fun showDatePicker() {
@@ -67,8 +75,9 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
             val lista: MutableList<String> = arrayListOf()
 
-            for (item in it){
+            for (item in it) {
                 lista.add(item.descricao)
+                mListaPrioridadeId.add(item.id)
             }
 
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, lista)
@@ -79,6 +88,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun listeners() {
         button_date.setOnClickListener(this)
+        button_save.setOnClickListener(this)
     }
 
     override fun onDateSet(view: DatePicker?, ano: Int, mes: Int, diaMes: Int) {

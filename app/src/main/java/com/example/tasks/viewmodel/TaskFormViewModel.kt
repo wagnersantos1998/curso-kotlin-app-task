@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tasks.service.model.PrioridadeModel
+import com.example.tasks.service.model.TarefaModel
 import com.example.tasks.service.repository.PrioridadeRepository
 
 class TaskFormViewModel(application: Application) : AndroidViewModel(application) {
@@ -17,4 +18,9 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
     fun buscarPrioridades() {
         mListaPrioridades.value = prioridadeRepository.buscarPrioridades()
     }
+
+    fun salvarTarefas(tarefa: TarefaModel) {
+
+    }
+
 }
