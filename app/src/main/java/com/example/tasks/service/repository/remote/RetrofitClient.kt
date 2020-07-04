@@ -14,21 +14,24 @@ class RetrofitClient private constructor() {
         private lateinit var retrofit: Retrofit
         private val baseURL: String = "http://devmasterteam.com/CursoAndroidAPI/"
 
-        private var tokenKey  = ""
-        private var personKey  = ""
+        private var tokenKey = ""
+        private var personKey = ""
 
         private fun instanciaRetrofit(): Retrofit {
 
             val httpClient = OkHttpClient.Builder()
 
-//            httpClient.addInterceptor { chain ->
-//                val request = chain.request()
-//                    .newBuilder()
-//                    .addHeader(TaskConstants.HEADER.TOKEN_KEY, tokenKey)
-//                    .addHeader(TaskConstants.HEADER.PERSON_KEY, personKey)
-//                    .build()
-//                chain.proceed(request)
-//            }
+            httpClient.addInterceptor(object : Interceptor {
+                override fun intercept(chain: Interceptor.Chain): Response {
+                    val request = chain.request()
+                        .newBuilder()
+                        .addHeader(TaskConstants.HEADER.TOKEN_KEY, tokenKey)
+                        .addHeader(TaskConstants.HEADER.PERSON_KEY, personKey)
+                        .build()
+
+                    return chain.proceed(request)
+                }
+            })
 
             if (!Companion::retrofit.isInitialized) {
                 retrofit = Retrofit.Builder()
@@ -40,7 +43,7 @@ class RetrofitClient private constructor() {
             return retrofit
         }
 
-        fun addHeader(token: String, personKey: String){
+        fun addHeader(token: String, personKey: String) {
             this.tokenKey = token
             this.personKey = personKey
         }

@@ -1,6 +1,8 @@
 package com.example.tasks.service.repository.local
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
 import com.example.tasks.service.model.PrioridadeModel
 
 @Dao

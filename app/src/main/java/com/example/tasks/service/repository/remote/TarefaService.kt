@@ -18,17 +18,17 @@ interface TarefaService {
     @GET("Tasks/{id}")
     fun listaTarefaId(@Path("id", encoded = true) id: Int): Call<List<TarefaModel>>
 
-    @POST("Tasks")
+    @POST("Task")
     @FormUrlEncoded
     fun criarTarefa(
 
-        @Field("priorityId") prioridadeId: Int,
+        @Field("PriorityId") prioridadeId: Int,
 
-        @Field("descricao") descricao: String,
+        @Field("Description") descricao: String,
 
-        @Field("dueDate") dataVencimento: String,
+        @Field("DueDate") dataVencimento: String,
 
-        @Field("complete") completo: Boolean
+        @Field("Complete") completo: Boolean
 
     ): Call<Boolean>
 

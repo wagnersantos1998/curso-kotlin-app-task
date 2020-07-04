@@ -2,9 +2,9 @@ package com.example.tasks.service.repository
 
 import android.content.Context
 import com.example.tasks.R
-import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
+import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.repository.remote.PessoaService
 import com.example.tasks.service.repository.remote.RetrofitClient
 import com.google.gson.Gson
@@ -16,7 +16,7 @@ class PessoaRepository(val context: Context) {
 
     private val mRemote = RetrofitClient.criarServico(PessoaService::class.java)
 
-    fun login(email: String, senha: String, listener: APIListener) {
+    fun login(email: String, senha: String, listener: APIListener<HeaderModel>) {
 
         val call: Call<HeaderModel> = mRemote.login(email, senha)
         call.enqueue(object : Callback<HeaderModel> {
@@ -38,7 +38,7 @@ class PessoaRepository(val context: Context) {
         })
     }
 
-    fun criarUsuario(nome: String, email: String, senha: String, listener: APIListener) {
+    fun criarUsuario(nome: String, email: String, senha: String, listener: APIListener<HeaderModel>) {
 
         val call: Call<HeaderModel> = mRemote.criarUsuario(nome, email, senha, true)
         call.enqueue(object : Callback<HeaderModel> {

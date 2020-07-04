@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.listener.ValidacaoListener
+import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.repository.PessoaRepository
 import com.example.tasks.service.repository.PrioridadeRepository
 import com.example.tasks.service.repository.local.SecurityPreferences
@@ -31,7 +31,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun doLogin(email: String, senha: String) {
 
-        mPessoaRepository.login(email, senha, object : APIListener {
+        mPessoaRepository.login(email, senha, object : APIListener<HeaderModel> {
 
             override fun sucesso(model: HeaderModel) {
 

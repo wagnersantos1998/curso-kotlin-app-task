@@ -1,10 +1,8 @@
 package com.example.tasks.service.listener
 
-import com.example.tasks.service.model.HeaderModel
+interface APIListener<t> {
 
-interface APIListener {
-
-    fun sucesso(model: HeaderModel)
+    fun sucesso(model: t)
     fun falha(mensagem: String)
 
 }

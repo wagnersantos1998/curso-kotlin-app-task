@@ -15,7 +15,6 @@ import com.example.tasks.R
 import com.example.tasks.viewmodel.MainViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
