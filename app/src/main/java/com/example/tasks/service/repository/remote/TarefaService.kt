@@ -6,16 +6,16 @@ import retrofit2.http.*
 
 interface TarefaService {
 
-    @GET("Tasks")
+    @GET("Task")
     fun listaTodasTarefas(): Call<List<TarefaModel>>
 
-    @GET("Tasks/Next7Days")
+    @GET("Task/Next7Days")
     fun listaProximaSemana(): Call<List<TarefaModel>>
 
-    @GET("Tasks/Overdue")
+    @GET("Task/Overdue")
     fun listaTarefasVencidas(): Call<List<TarefaModel>>
 
-    @GET("Tasks/{id}")
+    @GET("Task/{id}")
     fun listaTarefaId(@Path("id", encoded = true) id: Int): Call<List<TarefaModel>>
 
     @POST("Task")

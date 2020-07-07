@@ -16,6 +16,42 @@ class TarefaRepository(val context: Context) {
 
     private val mRemote = RetrofitClient.criarServico(TarefaService::class.java)
 
+    private fun listar(call: Call<List<TarefaModel>>, listener: APIListener<List<TarefaModel>>) {
+        call.enqueue(object : Callback<List<TarefaModel>> {
+            override fun onFailure(call: Call<List<TarefaModel>>, t: Throwable) {
+                listener.falha(context.getString(R.string.ERROR_UNEXPECTED))
+            }
+
+            override fun onResponse(
+                call: Call<List<TarefaModel>>,
+                response: Response<List<TarefaModel>>
+            ) {
+                if (response.code() != TaskConstants.HTTP.SUCCESS) {
+                    val validacao =
+                        Gson().fromJson(response.errorBody()!!.string(), String::class.java)
+                    listener.falha(validacao)
+                } else {
+                    response.body()?.let { listener.sucesso(it) }
+                }
+            }
+        })
+    }
+
+    fun listarTodasTarefa(listener: APIListener<List<TarefaModel>>) {
+        val call: Call<List<TarefaModel>> = mRemote.listaTodasTarefas()
+        listar(call, listener)
+    }
+
+    fun listarTarefaProximaSemana(listener: APIListener<List<TarefaModel>>) {
+        val call: Call<List<TarefaModel>> = mRemote.listaTodasTarefas()
+        listar(call, listener)
+    }
+
+    fun listarTodasTarefaVencidas(listener: APIListener<List<TarefaModel>>) {
+        val call: Call<List<TarefaModel>> = mRemote.listaTodasTarefas()
+        listar(call, listener)
+    }
+
     fun salvarTarefa(tarefa: TarefaModel, listener: APIListener<Boolean>) {
 
         val call: Call<Boolean> = mRemote.criarTarefa(
@@ -31,14 +67,15 @@ class TarefaRepository(val context: Context) {
             }
 
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                if (response.code() != TaskConstants.HTTP.SUCCESS){
-                val validacao = Gson().fromJson(response.errorBody()!!.string(), String::class.java)
-                listener.falha(validacao)
-            } else {
+                if (response.code() != TaskConstants.HTTP.SUCCESS) {
+                    val validacao =
+                        Gson().fromJson(response.errorBody()!!.string(), String::class.java)
+                    listener.falha(validacao)
+                } else {
                     response.body()?.let { listener.sucesso(it) }
                 }
-        }
-    })
+            }
+        })
 
-}
+    }
 }

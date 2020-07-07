@@ -1,6 +1,7 @@
 package com.example.tasks.view
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -87,7 +88,9 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         })
         mViewModel.validacao.observe(this, androidx.lifecycle.Observer {
             if (it.sucesso()) {
-                Toast.makeText(this, "Sucesso!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Tarefa cadastrada com sucesso!", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
             } else {
                 Toast.makeText(this, it.falha(), Toast.LENGTH_LONG).show()
             }
