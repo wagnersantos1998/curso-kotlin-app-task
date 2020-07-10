@@ -40,4 +40,6 @@ class PrioridadeRepository(val context: Context) {
         return mPrioridadDatabase.buscarPrioridade()
     }
 
+    fun buscarDescricao(id: Int)= mPrioridadDatabase.buscarDescricao(id)
+
 }

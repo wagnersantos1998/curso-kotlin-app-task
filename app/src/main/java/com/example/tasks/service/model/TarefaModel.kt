@@ -10,7 +10,7 @@ class TarefaModel {
     @SerializedName("PriorityId")
     var prioridadeId: Int = 0
 
-    @SerializedName("description")
+    @SerializedName("Description")
     var descricao: String = ""
 
     @SerializedName("DueDate")

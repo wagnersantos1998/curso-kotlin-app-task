@@ -11,6 +11,9 @@ interface PrioridadeDAO {
     @Insert
     fun salvarLista(lista: List<PrioridadeModel>)
 
+    @Query("SELECT descricao FROM  prioridade WHERE id = :id")
+    fun buscarDescricao(id: Int): String
+
     @Query("SELECT * FROM  prioridade")
     fun buscarPrioridade(): List<PrioridadeModel>
 
