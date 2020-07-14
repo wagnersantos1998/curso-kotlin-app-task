@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.tasks.R
+import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.model.TarefaModel
 import com.example.tasks.viewmodel.TaskFormViewModel
 import kotlinx.android.synthetic.main.activity_task_form.*
@@ -21,6 +22,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
     private lateinit var mViewModel: TaskFormViewModel
     private val mDataFormatada = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+    private var mTarefaId = 0
     val mListaPrioridadeId: MutableList<Int> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,16 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         observe()
         listarPrioridades()
 
+        carregarDadosTarefa()
+
+    }
+
+    private fun carregarDadosTarefa() {
+        val bundle = intent.extras
+        if (bundle != null) {
+            val tarefaId = bundle.getInt(TaskConstants.BUNDLE.TASKID)
+            mViewModel.carregarDados(tarefaId)
+        }
     }
 
     private fun listarPrioridades() {
@@ -53,6 +65,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun eventoSalvar() {
         val tarefa = TarefaModel().apply {
+            this.id = mTarefaId
             this.descricao = edit_description.text.toString()
             this.completo = check_complete.isChecked
             this.dataVencimento = button_date.text.toString()
@@ -95,6 +108,28 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
                 Toast.makeText(this, it.falha(), Toast.LENGTH_LONG).show()
             }
         })
+        mViewModel.tarefa.observe(this, androidx.lifecycle.Observer {
+
+            edit_description.setText(it.descricao)
+            check_complete.isChecked = it.completo
+
+            spinner_priority.setSelection(pegarIndex(it.prioridadeId))
+
+            val dataFormatada =
+                SimpleDateFormat("yyyy-MM-dd").parse(it.dataVencimento)
+            button_date.text = mDataFormatada.format(dataFormatada)
+
+        })
+    }
+
+    private fun pegarIndex(prioridadeId: Int): Int {
+        var index = 0
+        for (i in 0 until mListaPrioridadeId.count())
+            if (mListaPrioridadeId[i] == prioridadeId) {
+                index = i
+                break
+            }
+        return index
     }
 
     private fun listeners() {

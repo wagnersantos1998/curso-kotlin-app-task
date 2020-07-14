@@ -16,7 +16,7 @@ interface TarefaService {
     fun listaTarefasVencidas(): Call<List<TarefaModel>>
 
     @GET("Task/{id}")
-    fun listaTarefaId(@Path("id", encoded = true) id: Int): Call<List<TarefaModel>>
+    fun listaTarefaId(@Path("id", encoded = true) id: Int): Call<TarefaModel>
 
     @POST("Task")
     @FormUrlEncoded

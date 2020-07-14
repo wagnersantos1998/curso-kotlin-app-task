@@ -22,9 +22,24 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
     private val mValidacao = MutableLiveData<ValidacaoListener>()
     var validacao: LiveData<ValidacaoListener> = mValidacao
 
+    private val mTarefa = MutableLiveData<TarefaModel>()
+    var tarefa: LiveData<TarefaModel> = mTarefa
+
 
     fun buscarPrioridades() {
         mListaPrioridades.value = mPrioridadeRepository.buscarPrioridades()
+    }
+
+    fun carregarDados(id: Int) {
+        mTarefaRepository.carregarTarefaId(id, object : APIListener<TarefaModel> {
+            override fun sucesso(model: TarefaModel) {
+                mTarefa.value = model
+            }
+
+            override fun falha(mensagem: String) {
+
+            }
+        })
     }
 
     fun salvarTarefas(tarefa: TarefaModel) {

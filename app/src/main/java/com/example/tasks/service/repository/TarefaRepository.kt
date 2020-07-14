@@ -43,12 +43,12 @@ class TarefaRepository(val context: Context) {
     }
 
     fun listarTarefaProximaSemana(listener: APIListener<List<TarefaModel>>) {
-        val call: Call<List<TarefaModel>> = mRemote.listaTodasTarefas()
+        val call: Call<List<TarefaModel>> = mRemote.listaProximaSemana()
         listar(call, listener)
     }
 
     fun listarTodasTarefaVencidas(listener: APIListener<List<TarefaModel>>) {
-        val call: Call<List<TarefaModel>> = mRemote.listaTodasTarefas()
+        val call: Call<List<TarefaModel>> = mRemote.listaTarefasVencidas()
         listar(call, listener)
     }
 
@@ -78,4 +78,27 @@ class TarefaRepository(val context: Context) {
         })
 
     }
+
+    fun carregarTarefaId(id: Int, listener: APIListener<TarefaModel>) {
+
+        val call: Call<TarefaModel> = mRemote.listaTarefaId(id)
+
+        call.enqueue(object : Callback<TarefaModel> {
+            override fun onFailure(call: Call<TarefaModel>, t: Throwable) {
+                listener.falha(context.getString(R.string.ERROR_UNEXPECTED))
+            }
+
+            override fun onResponse(call: Call<TarefaModel>, response: Response<TarefaModel>) {
+                if (response.code() != TaskConstants.HTTP.SUCCESS) {
+                    val validacao =
+                        Gson().fromJson(response.errorBody()!!.string(), String::class.java)
+                    listener.falha(validacao)
+                } else {
+                    response.body()?.let { listener.sucesso(it) }
+                }
+            }
+        })
+
+    }
+
 }
