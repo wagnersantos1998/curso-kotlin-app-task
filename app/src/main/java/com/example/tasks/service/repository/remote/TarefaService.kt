@@ -40,7 +40,7 @@ interface TarefaService {
 
         @Field("priorityId") prioridadeId: Int,
 
-        @Field("descricao") descricao: String,
+        @Field("Description") descricao: String,
 
         @Field("dueDate") dataVencimento: String,
 

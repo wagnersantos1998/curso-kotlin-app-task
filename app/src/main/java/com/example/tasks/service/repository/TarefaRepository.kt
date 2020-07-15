@@ -79,6 +79,34 @@ class TarefaRepository(val context: Context) {
 
     }
 
+    fun atualizarTarefa(tarefa: TarefaModel, listener: APIListener<Boolean>) {
+
+        val call: Call<Boolean> = mRemote.atualizarTarefa(
+            tarefa.id,
+            tarefa.prioridadeId,
+            tarefa.descricao,
+            tarefa.dataVencimento,
+            tarefa.completo
+        )
+
+        call.enqueue(object : Callback<Boolean> {
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                listener.falha(context.getString(R.string.ERROR_UNEXPECTED))
+            }
+
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if (response.code() != TaskConstants.HTTP.SUCCESS) {
+                    val validacao =
+                        Gson().fromJson(response.errorBody()!!.string(), String::class.java)
+                    listener.falha(validacao)
+                } else {
+                    response.body()?.let { listener.sucesso(it) }
+                }
+            }
+        })
+
+    }
+
     fun carregarTarefaId(id: Int, listener: APIListener<TarefaModel>) {
 
         val call: Call<TarefaModel> = mRemote.listaTarefaId(id)

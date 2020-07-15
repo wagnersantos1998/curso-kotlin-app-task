@@ -22,7 +22,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
     private lateinit var mViewModel: TaskFormViewModel
     private val mDataFormatada = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-    private var mTarefaId = 0
+    var tarefaId = 0
     val mListaPrioridadeId: MutableList<Int> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     private fun carregarDadosTarefa() {
         val bundle = intent.extras
         if (bundle != null) {
-            val tarefaId = bundle.getInt(TaskConstants.BUNDLE.TASKID)
+            tarefaId = bundle.getInt(TaskConstants.BUNDLE.TASKID)
             mViewModel.carregarDados(tarefaId)
         }
     }
@@ -65,7 +65,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun eventoSalvar() {
         val tarefa = TarefaModel().apply {
-            this.id = mTarefaId
+            this.id = tarefaId
             this.descricao = edit_description.text.toString()
             this.completo = check_complete.isChecked
             this.dataVencimento = button_date.text.toString()
@@ -99,9 +99,18 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             spinner_priority.adapter = adapter
 
         })
-        mViewModel.validacao.observe(this, androidx.lifecycle.Observer {
+        mViewModel.insercao.observe(this, androidx.lifecycle.Observer {
             if (it.sucesso()) {
                 Toast.makeText(this, "Tarefa cadastrada com sucesso!", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(this, it.falha(), Toast.LENGTH_LONG).show()
+            }
+        })
+        mViewModel.atualizacao.observe(this, androidx.lifecycle.Observer {
+            if (it.sucesso()) {
+                Toast.makeText(this, "Tarefa atualizada com sucesso!", Toast.LENGTH_LONG).show()
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {

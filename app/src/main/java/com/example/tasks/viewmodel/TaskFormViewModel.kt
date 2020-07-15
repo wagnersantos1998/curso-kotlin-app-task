@@ -19,8 +19,11 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
     private val mListaPrioridades = MutableLiveData<List<PrioridadeModel>>()
     var listaPrioridades: LiveData<List<PrioridadeModel>> = mListaPrioridades
 
-    private val mValidacao = MutableLiveData<ValidacaoListener>()
-    var validacao: LiveData<ValidacaoListener> = mValidacao
+    private val mAtualizacao = MutableLiveData<ValidacaoListener>()
+    var atualizacao: LiveData<ValidacaoListener> = mAtualizacao
+
+    private val mInsercao = MutableLiveData<ValidacaoListener>()
+    var insercao: LiveData<ValidacaoListener> = mInsercao
 
     private val mTarefa = MutableLiveData<TarefaModel>()
     var tarefa: LiveData<TarefaModel> = mTarefa
@@ -43,15 +46,27 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun salvarTarefas(tarefa: TarefaModel) {
-        mTarefaRepository.salvarTarefa(tarefa, object : APIListener<Boolean> {
-            override fun sucesso(model: Boolean) {
-                mValidacao.value = ValidacaoListener()
-            }
+        if (tarefa.id == 0) {
+            mTarefaRepository.salvarTarefa(tarefa, object : APIListener<Boolean> {
+                override fun sucesso(model: Boolean) {
+                    mInsercao.value = ValidacaoListener()
+                }
 
-            override fun falha(mensagem: String) {
-                mValidacao.value = ValidacaoListener(mensagem)
-            }
-        })
+                override fun falha(mensagem: String) {
+                    mInsercao.value = ValidacaoListener(mensagem)
+                }
+            })
+        } else {
+            mTarefaRepository.atualizarTarefa(tarefa, object : APIListener<Boolean> {
+                override fun sucesso(model: Boolean) {
+                    mAtualizacao.value = ValidacaoListener()
+                }
+
+                override fun falha(mensagem: String) {
+                    mAtualizacao.value = ValidacaoListener(mensagem)
+                }
+
+            })
+        }
     }
-
 }
