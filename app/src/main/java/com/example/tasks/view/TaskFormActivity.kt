@@ -43,8 +43,11 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     private fun carregarDadosTarefa() {
         val bundle = intent.extras
         if (bundle != null) {
+            button_save.setText("Atualizar tarefa")
             tarefaId = bundle.getInt(TaskConstants.BUNDLE.TASKID)
             mViewModel.carregarDados(tarefaId)
+        } else{
+            button_save.setText(R.string.adicionar_tarefa)
         }
     }
 

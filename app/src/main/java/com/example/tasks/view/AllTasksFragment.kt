@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,7 @@ class AllTasksFragment : Fragment() {
 
     private lateinit var mViewModel: AllTasksViewModel
     private lateinit var mListener: TaskListener
+
     private val mAdapter = TaskAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
@@ -41,6 +43,7 @@ class AllTasksFragment : Fragment() {
             }
 
             override fun onDeleteClick(id: Int) {
+                mViewModel.deletarTarefa(id)
             }
 
             override fun onCompleteClick(id: Int) {
@@ -65,8 +68,14 @@ class AllTasksFragment : Fragment() {
 
     private fun observe() {
         mViewModel.lista.observe(viewLifecycleOwner, Observer {
-            if (it.count() > 0){
+            if (it.count() > 0) {
                 mAdapter.atualizarListener(it)
+            }
+        })
+        mViewModel.validacao.observe(viewLifecycleOwner, Observer {
+            if (it){
+                Toast.makeText(context, "Tarefa deletada com sucesso!", Toast.LENGTH_LONG).show()
+                mViewModel.listaTodasTarefas()
             }
         })
     }
