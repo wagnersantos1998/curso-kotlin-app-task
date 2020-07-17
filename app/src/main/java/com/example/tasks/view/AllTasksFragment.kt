@@ -47,9 +47,11 @@ class AllTasksFragment : Fragment() {
             }
 
             override fun onCompleteClick(id: Int) {
+                mViewModel.atualizarTarefaCompleta(id)
             }
 
             override fun onUndoClick(id: Int) {
+                mViewModel.atualizarTarefaNaoCompleta(id)
             }
         }
 
@@ -73,8 +75,13 @@ class AllTasksFragment : Fragment() {
             }
         })
         mViewModel.validacao.observe(viewLifecycleOwner, Observer {
-            if (it){
+            if (it) {
                 Toast.makeText(context, "Tarefa deletada com sucesso!", Toast.LENGTH_LONG).show()
+                mViewModel.listaTodasTarefas()
+            }
+        })
+        mViewModel.tarefaCompleta.observe(viewLifecycleOwner, Observer {
+            if (it) {
                 mViewModel.listaTodasTarefas()
             }
         })

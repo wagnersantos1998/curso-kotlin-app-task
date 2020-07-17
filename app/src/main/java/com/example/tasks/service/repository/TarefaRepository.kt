@@ -126,8 +126,50 @@ class TarefaRepository(val context: Context) {
                     response.body()?.let { listener.sucesso(it) }
                 }
             }
+        })
+    }
 
+    fun atualizarTarefaCompleta(id: Int, listener: APIListener<Boolean>) {
 
+        val call: Call<Boolean> = mRemote.atualizarTarefaCompletada(id)
+
+        call.enqueue(object : Callback<Boolean> {
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                listener.falha(context.getString(R.string.ERROR_UNEXPECTED))
+            }
+
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if (response.code() != TaskConstants.HTTP.SUCCESS) {
+                    val validacao =
+                        Gson().fromJson(response.errorBody()!!.string(), String::class.java)
+                    listener.falha(validacao)
+                } else {
+                    response.body()?.let { listener.sucesso(it) }
+                }
+            }
+        })
+    }
+
+    fun atualizarTarefaNaoCompleta(id: Int, listener: APIListener<Boolean>) {
+
+        val call: Call<Boolean> = mRemote.atualizarTarefaNaoCompletada(id)
+
+        call.enqueue(object : Callback<Boolean> {
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                listener.falha(context.getString(R.string.ERROR_UNEXPECTED))
+            }
+
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if (response.code() != TaskConstants.HTTP.SUCCESS) {
+                    val validacao =
+                        Gson().fromJson(response.errorBody()!!.string(), String::class.java)
+                    listener.falha(validacao)
+                } else {
+                    response.body()?.let { listener.sucesso(it) }
+                }
+            }
         })
     }
 

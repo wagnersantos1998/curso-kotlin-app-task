@@ -19,6 +19,9 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
     private val mValidacao = MutableLiveData<Boolean>()
     var validacao: LiveData<Boolean> = mValidacao
 
+    private val mTarefaCompleta = MutableLiveData<Boolean>()
+    var tarefaCompleta: LiveData<Boolean> = mTarefaCompleta
+
     fun listaTodasTarefas() {
 
         mTarefaRepository.listarTodasTarefa(object : APIListener<List<TarefaModel>>{
@@ -39,6 +42,34 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
         mTarefaRepository.deletarTarefa(id, object :APIListener<Boolean>{
             override fun sucesso(model: Boolean) {
                 mValidacao.value = model
+            }
+
+            override fun falha(mensagem: String) {
+
+            }
+
+        })
+    }
+
+    fun atualizarTarefaCompleta(id:Int){
+
+        mTarefaRepository.atualizarTarefaCompleta(id, object :APIListener<Boolean>{
+            override fun sucesso(model: Boolean) {
+                mTarefaCompleta.value = model
+            }
+
+            override fun falha(mensagem: String) {
+
+            }
+
+        })
+    }
+
+    fun atualizarTarefaNaoCompleta(id: Int){
+
+        mTarefaRepository.atualizarTarefaNaoCompleta(id, object :APIListener<Boolean>{
+            override fun sucesso(model: Boolean) {
+                mTarefaCompleta.value = model
             }
 
             override fun falha(mensagem: String) {
