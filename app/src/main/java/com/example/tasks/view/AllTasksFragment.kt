@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tasks.R
+import com.example.tasks.funcoes.toast
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.TaskListener
 import com.example.tasks.view.adapter.TaskAdapter
@@ -69,20 +70,23 @@ class AllTasksFragment : Fragment() {
     }
 
     private fun observe() {
-        mViewModel.lista.observe(viewLifecycleOwner, Observer {
-            if (it.count() > 0) {
-                mAdapter.atualizarListener(it)
-            }
-        })
         mViewModel.validacao.observe(viewLifecycleOwner, Observer {
             if (it) {
-                Toast.makeText(context, "Tarefa deletada com sucesso!", Toast.LENGTH_LONG).show()
+                var mensagem: String = "Tarefa removida com sucesso!"
+                val context = requireContext()
+                toast(context, mensagem, Toast.LENGTH_LONG)
                 mViewModel.listaTodasTarefas()
             }
         })
         mViewModel.tarefaCompleta.observe(viewLifecycleOwner, Observer {
             if (it) {
                 mViewModel.listaTodasTarefas()
+            }
+        })
+
+        mViewModel.lista.observe(viewLifecycleOwner, Observer {
+            if (it.count() >= 0) {
+                mAdapter.atualizarListener(it)
             }
         })
     }

@@ -2,6 +2,8 @@ package com.example.tasks.view
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -10,12 +12,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.tasks.R
+import com.example.tasks.funcoes.VerificarConexao
+import com.example.tasks.funcoes.mensagensSnack
+import com.example.tasks.funcoes.pintarSnack
+import com.example.tasks.funcoes.toast
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.model.TarefaModel
 import com.example.tasks.viewmodel.TaskFormViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_task_form.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     DatePickerDialog.OnDateSetListener {
@@ -29,6 +37,13 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_form)
 
+        var aux: Int = 0
+
+        val intentFilter = IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")
+        intentFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED")
+        val conexaoInternet = VerificarConexao()
+        registerReceiver(conexaoInternet, intentFilter)
+
         mViewModel = ViewModelProvider(this).get(TaskFormViewModel::class.java)
 
         // Inicializa eventos
@@ -37,6 +52,20 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         listarPrioridades()
 
         carregarDadosTarefa()
+
+        conexaoInternet.addOnMudarEstadoConexao(
+            object : VerificarConexao.IOnMudarEstadoConexao {
+                override fun onMudar(tipoConexao: VerificarConexao.TipoConexao?) {
+                    if (tipoConexao === VerificarConexao.TipoConexao.TIPO_NAO_CONECTADO) {
+                        pintarSnack(mensagensSnack("Sem Conexão!", layoutFormTarefa, Snackbar.LENGTH_INDEFINITE), Color.WHITE, Color.RED)
+                        aux = 1
+                    } else if (aux === 1) {
+                        pintarSnack(mensagensSnack("Conectado!", layoutFormTarefa, Snackbar.LENGTH_SHORT), Color.WHITE, Color.GREEN)
+                        aux = 0
+                    }
+                }
+            }
+        )
 
     }
 
@@ -104,20 +133,20 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         })
         mViewModel.insercao.observe(this, androidx.lifecycle.Observer {
             if (it.sucesso()) {
-                Toast.makeText(this, "Tarefa cadastrada com sucesso!", Toast.LENGTH_LONG).show()
+                toast(this, "Tarefa criada com sucesso", Toast.LENGTH_LONG)
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
-                Toast.makeText(this, it.falha(), Toast.LENGTH_LONG).show()
+                toast(this, it.falha(), Toast.LENGTH_LONG)
             }
         })
         mViewModel.atualizacao.observe(this, androidx.lifecycle.Observer {
             if (it.sucesso()) {
-                Toast.makeText(this, "Tarefa atualizada com sucesso!", Toast.LENGTH_LONG).show()
+                toast(this, "Tarefa atualizada com sucesso!", Toast.LENGTH_LONG)
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
-                Toast.makeText(this, it.falha(), Toast.LENGTH_LONG).show()
+                toast(this, it.falha(), Toast.LENGTH_LONG)
             }
         })
         mViewModel.tarefa.observe(this, androidx.lifecycle.Observer {

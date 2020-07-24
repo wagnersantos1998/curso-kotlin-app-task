@@ -1,6 +1,8 @@
 package com.example.tasks.view
 
 import android.content.Intent
+import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -12,9 +14,14 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.tasks.R
+import com.example.tasks.funcoes.VerificarConexao
+import com.example.tasks.funcoes.mensagensSnack
+import com.example.tasks.funcoes.pintarSnack
 import com.example.tasks.viewmodel.MainViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +33,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        var aux: Int = 0
+
+        val intentFilter = IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")
+        intentFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED")
+        val conexaoInternet = VerificarConexao()
+        registerReceiver(conexaoInternet, intentFilter)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -40,6 +54,20 @@ class MainActivity : AppCompatActivity() {
 
         // Observadores
         observe()
+
+        conexaoInternet.addOnMudarEstadoConexao(
+            object : VerificarConexao.IOnMudarEstadoConexao {
+                override fun onMudar(tipoConexao: VerificarConexao.TipoConexao?) {
+                    if (tipoConexao === VerificarConexao.TipoConexao.TIPO_NAO_CONECTADO) {
+                        pintarSnack(mensagensSnack("Sem Conexão!", drawer_layout, Snackbar.LENGTH_INDEFINITE), Color.WHITE, Color.RED)
+                        aux = 1
+                    } else if (aux === 1) {
+                        pintarSnack(mensagensSnack("Conectado!", drawer_layout, Snackbar.LENGTH_SHORT), Color.WHITE, Color.GREEN)
+                        aux = 0
+                    }
+                }
+            }
+        )
     }
 
     override fun onResume() {

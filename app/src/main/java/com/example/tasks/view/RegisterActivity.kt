@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tasks.R
+import com.example.tasks.funcoes.toast
 import com.example.tasks.viewmodel.RegisterViewModel
 import kotlinx.android.synthetic.main.activity_register.*
 
@@ -44,7 +45,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(this, MainActivity::class.java))
             } else {
                 val mensagem = it.falha()
-                Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show()
+                toast(this, mensagem, Toast.LENGTH_LONG)
             }
         })
     }

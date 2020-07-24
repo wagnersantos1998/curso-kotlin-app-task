@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.model.TarefaModel
 import com.example.tasks.service.repository.TarefaRepository
-import java.util.ArrayList
 
 class AllTasksViewModel(application: Application) : AndroidViewModel(application) {
 
