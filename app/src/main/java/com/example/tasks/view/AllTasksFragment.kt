@@ -1,6 +1,8 @@
 package com.example.tasks.view
 
 import android.content.Intent
+import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +14,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tasks.R
+import com.example.tasks.funcoes.VerificarConexao
+import com.example.tasks.funcoes.mensagensSnack
+import com.example.tasks.funcoes.pintarSnack
 import com.example.tasks.funcoes.toast
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.TaskListener
 import com.example.tasks.view.adapter.TaskAdapter
 import com.example.tasks.viewmodel.AllTasksViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_all_tasks.*
 
 class AllTasksFragment : Fragment() {
 
@@ -24,6 +32,8 @@ class AllTasksFragment : Fragment() {
     private lateinit var mListener: TaskListener
 
     private val mAdapter = TaskAdapter()
+
+    var aux: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
         mViewModel = ViewModelProvider(this).get(AllTasksViewModel::class.java)
@@ -61,6 +71,7 @@ class AllTasksFragment : Fragment() {
 
         // Retorna view
         return root
+
     }
 
     override fun onResume() {
@@ -86,7 +97,7 @@ class AllTasksFragment : Fragment() {
 
         mViewModel.lista.observe(viewLifecycleOwner, Observer {
             if (it.count() >= 0) {
-                mAdapter.atualizarListener(it)
+                mAdapter.atualizarLista(it)
             }
         })
     }

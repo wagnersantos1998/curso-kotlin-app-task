@@ -31,7 +31,7 @@ class TaskAdapter : RecyclerView.Adapter<TaskViewHolder>() {
         mListener = listener
     }
 
-    fun atualizarListener(lista: List<TarefaModel>) {
+    fun atualizarLista(lista: List<TarefaModel>) {
         mLista = lista
         notifyDataSetChanged()
     }

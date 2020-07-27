@@ -80,4 +80,15 @@
         app:layout_constraintLeft_toRightOf="@id/text_new_account"
         app:layout_constraintRight_toRightOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progressBarLogin"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_login" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

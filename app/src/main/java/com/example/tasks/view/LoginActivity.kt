@@ -47,9 +47,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 override fun onMudar(tipoConexao: VerificarConexao.TipoConexao?) {
                     if (tipoConexao === VerificarConexao.TipoConexao.TIPO_NAO_CONECTADO) {
                         pintarSnack(mensagensSnack("Sem Conexão!", layoutLogin, Snackbar.LENGTH_INDEFINITE), Color.WHITE, Color.RED)
+                        progressBarLogin.visibility = View.VISIBLE
                         aux = 1
                     } else if (aux === 1) {
                         pintarSnack(mensagensSnack("Conectado!", layoutLogin, Snackbar.LENGTH_SHORT), Color.WHITE, Color.GREEN)
+                        progressBarLogin.visibility = View.INVISIBLE
                         aux = 0
                     }
                 }
