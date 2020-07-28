@@ -1,8 +1,6 @@
 package com.example.tasks.view
 
 import android.content.Intent
-import android.content.IntentFilter
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,17 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tasks.R
-import com.example.tasks.funcoes.VerificarConexao
-import com.example.tasks.funcoes.mensagensSnack
-import com.example.tasks.funcoes.pintarSnack
 import com.example.tasks.funcoes.toast
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.TaskListener
 import com.example.tasks.view.adapter.TaskAdapter
 import com.example.tasks.viewmodel.AllTasksViewModel
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_all_tasks.*
 
 class AllTasksFragment : Fragment() {
 
@@ -33,11 +25,15 @@ class AllTasksFragment : Fragment() {
 
     private val mAdapter = TaskAdapter()
 
+    private var mTarefaFiltro = 0
+
     var aux: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
         mViewModel = ViewModelProvider(this).get(AllTasksViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_all_tasks, container, false)
+
+        mTarefaFiltro = arguments!!.getInt(TaskConstants.BUNDLE.TAREFAFILTRO, 0)
 
         val recycler = root.findViewById<RecyclerView>(R.id.recycler_all_tasks)
         recycler.layoutManager = LinearLayoutManager(context)
@@ -77,7 +73,7 @@ class AllTasksFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mAdapter.attachListener(mListener)
-        mViewModel.listaTodasTarefas()
+        mViewModel.listaTodasTarefas(mTarefaFiltro)
     }
 
     private fun observe() {
@@ -86,12 +82,12 @@ class AllTasksFragment : Fragment() {
                 var mensagem: String = "Tarefa removida com sucesso!"
                 val context = requireContext()
                 toast(context, mensagem, Toast.LENGTH_LONG)
-                mViewModel.listaTodasTarefas()
+                mViewModel.listaTodasTarefas(mTarefaFiltro)
             }
         })
         mViewModel.tarefaCompleta.observe(viewLifecycleOwner, Observer {
             if (it) {
-                mViewModel.listaTodasTarefas()
+                mViewModel.listaTodasTarefas(mTarefaFiltro)
             }
         })
 

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.model.TarefaModel
 import com.example.tasks.service.repository.TarefaRepository
@@ -21,24 +22,51 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
     private val mTarefaCompleta = MutableLiveData<Boolean>()
     var tarefaCompleta: LiveData<Boolean> = mTarefaCompleta
 
-    fun listaTodasTarefas() {
+    fun listaTodasTarefas(filtro: Int) {
 
-        mTarefaRepository.listarTodasTarefa(object : APIListener<List<TarefaModel>>{
-            override fun sucesso(model: List<TarefaModel>) {
-                mLista.value = model
-            }
+        if (filtro == TaskConstants.FILTER.TODAS) {
 
-            override fun falha(mensagem: String) {
-                mLista.value = arrayListOf()
-            }
+            mTarefaRepository.listarTodasTarefa(object : APIListener<List<TarefaModel>> {
+                override fun sucesso(model: List<TarefaModel>) {
+                    mLista.value = model
+                }
 
-        })
+                override fun falha(mensagem: String) {
+                    mLista.value = arrayListOf()
+                }
+
+            })
+
+        } else if (filtro == TaskConstants.FILTER.PROXIMAS) {
+
+            mTarefaRepository.listarTarefaProximaSemana(object : APIListener<List<TarefaModel>> {
+                override fun sucesso(model: List<TarefaModel>) {
+                    mLista.value = model
+                }
+
+                override fun falha(mensagem: String) {
+                    mLista.value = arrayListOf()
+                }
+
+            })
+        } else {
+            mTarefaRepository.listarTodasTarefaVencidas(object : APIListener<List<TarefaModel>> {
+                override fun sucesso(model: List<TarefaModel>) {
+                    mLista.value = model
+                }
+
+                override fun falha(mensagem: String) {
+                    mLista.value = arrayListOf()
+                }
+
+            })
+        }
 
     }
 
-    fun deletarTarefa(id:Int){
+    fun deletarTarefa(id: Int) {
 
-        mTarefaRepository.deletarTarefa(id, object :APIListener<Boolean>{
+        mTarefaRepository.deletarTarefa(id, object : APIListener<Boolean> {
             override fun sucesso(model: Boolean) {
                 mValidacao.value = model
             }
@@ -50,9 +78,9 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
         })
     }
 
-    fun atualizarTarefaCompleta(id:Int){
+    fun atualizarTarefaCompleta(id: Int) {
 
-        mTarefaRepository.atualizarTarefaCompleta(id, object :APIListener<Boolean>{
+        mTarefaRepository.atualizarTarefaCompleta(id, object : APIListener<Boolean> {
             override fun sucesso(model: Boolean) {
                 mTarefaCompleta.value = model
             }
@@ -64,9 +92,9 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
         })
     }
 
-    fun atualizarTarefaNaoCompleta(id: Int){
+    fun atualizarTarefaNaoCompleta(id: Int) {
 
-        mTarefaRepository.atualizarTarefaNaoCompleta(id, object :APIListener<Boolean>{
+        mTarefaRepository.atualizarTarefaNaoCompleta(id, object : APIListener<Boolean> {
             override fun sucesso(model: Boolean) {
                 mTarefaCompleta.value = model
             }

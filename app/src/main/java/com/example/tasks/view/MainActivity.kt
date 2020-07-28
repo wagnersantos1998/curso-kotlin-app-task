@@ -1,6 +1,5 @@
 package com.example.tasks.view
 
-import android.app.Application
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
@@ -17,20 +16,14 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.tasks.R
-import com.example.tasks.R.id.text_name
 import com.example.tasks.funcoes.VerificarConexao
 import com.example.tasks.funcoes.mensagensSnack
 import com.example.tasks.funcoes.pintarSnack
-import com.example.tasks.service.listener.APIListener
-import com.example.tasks.service.model.TarefaModel
-import com.example.tasks.service.repository.TarefaRepository
-import com.example.tasks.view.adapter.TaskAdapter
 import com.example.tasks.viewmodel.MainViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity() {
 

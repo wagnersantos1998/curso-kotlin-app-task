@@ -24,13 +24,13 @@ class TaskConstants private constructor() {
 
     object BUNDLE {
         const val TASKID = "taskid"
-        const val TASKFILTER = "taskfilter"
+        const val TAREFAFILTRO = "taskfilter"
     }
 
     object FILTER {
-        const val ALL = 0
-        const val NEXT = 1
-        const val EXPIRED = 2
+        const val TODAS = 0
+        const val PROXIMAS = 1
+        const val EXPIRADAS = 2
     }
 
 }
