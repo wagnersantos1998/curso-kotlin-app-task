@@ -92,9 +92,9 @@
 
     <Button
         android:id="@+id/button_save"
+        style="@style/estiloPadraoBotao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
         android:text="@string/adicionar_tarefa"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -5,6 +5,7 @@
     android:id="@+id/layoutLogin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/shape_background"
     android:padding="16dp"
     tools:context=".view.LoginActivity">
 
@@ -21,6 +22,7 @@
 
     <EditText
         android:id="@+id/edit_email"
+        style="@style/estiloPadraoEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
@@ -34,6 +36,7 @@
 
     <EditText
         android:id="@+id/edit_password"
+        style="@style/estiloPadraoEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -47,6 +50,7 @@
 
     <Button
         android:id="@+id/button_login"
+        style="@style/estiloPadraoBotao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -62,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="@string/nao_tem_uma_conta"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -75,6 +80,7 @@
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@id/text_new_account"
         android:text="@string/cadastre_se"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/text_new_account"
